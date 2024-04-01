@@ -17,6 +17,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
       <Image
         source={{ uri: product.image || defaultPizzaIMG }}
         style={styles.image}
+        resizeMode="contain"
       />
       <Text style={styles.title}>
         {product.name} for Viktoriia and Yaroslav I love you, my dear wife!
@@ -33,6 +34,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     borderRadius: 10,
+    flex: 1,
+    maxWidth: "50%",
   },
   image: {
     width: "100%",
