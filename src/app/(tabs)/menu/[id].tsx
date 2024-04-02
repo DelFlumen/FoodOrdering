@@ -1,6 +1,7 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
+import Button from "@/components/Button";
 
 import products from "@assets/data/products";
 import Colors from "@/constants/Colors";
@@ -9,11 +10,16 @@ const sizes = ["S", "M", "L", "XL"];
 
 const ProductDetailsScreen = () => {
   const { id } = useLocalSearchParams();
+  const [selectedSize, setSelectedSize] = useState("M");
   const product = products.find((product) => product.id === +id);
 
   if (!product) {
     return <Text>Product not found</Text>;
   }
+
+  const addToCart = () => {
+    console.warn("Added to cart, size: ", selectedSize);
+  };
 
   const defaultPizzaIMG =
     "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png";
@@ -31,13 +37,30 @@ const ProductDetailsScreen = () => {
       <Text>Select size</Text>
       <View style={styles.sizes}>
         {sizes.map((size) => (
-          <View key={size} style={styles.size}>
-            <Text style={styles.sizeText}>{size}</Text>
-          </View>
+          <Pressable
+            onPress={() => setSelectedSize(size)}
+            key={size}
+            style={[
+              styles.size,
+              {
+                backgroundColor: selectedSize === size ? "gainsboro" : "white",
+              },
+            ]}
+          >
+            <Text
+              style={[
+                styles.sizeText,
+                { color: selectedSize === size ? "black" : "gray" },
+              ]}
+            >
+              {size}
+            </Text>
+          </Pressable>
         ))}
       </View>
 
       <Text style={styles.price}>${product.price}</Text>
+      <Button onPress={addToCart} text="Add to cart" />
     </View>
   );
 };
@@ -64,6 +87,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.light.tint,
     fontWeight: "bold",
+    marginTop: "auto",
   },
   sizes: {
     flexDirection: "row",
