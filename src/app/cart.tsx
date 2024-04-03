@@ -9,7 +9,7 @@ const CartScreen = () => {
 
   return (
     <View style={{ padding: 10 }}>
-      {items.length && (
+      {items.length ? (
         <FlatList
           data={items}
           renderItem={({ item }) => (
@@ -17,6 +17,8 @@ const CartScreen = () => {
           )}
           contentContainerStyle={{ padding: 10, gap: 10 }}
         />
+      ) : (
+        <Text>No items</Text>
       )}
     </View>
   );
