@@ -1,6 +1,7 @@
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { Stack } from "expo-router";
 import Button from "@/components/Button";
 import { defaultPizzaIMG } from "@/constants/Images";
 import Colors from "@/constants/Colors";
@@ -48,7 +49,7 @@ const CreateProductScreen = () => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.3,
     });
 
     if (!result.canceled) {
@@ -58,7 +59,10 @@ const CreateProductScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={{ uri: defaultPizzaIMG }} style={styles.image} />
+      <Stack.Screen
+        options={{ title: "Create Product", headerTitleAlign: "center" }}
+      />
+      <Image source={{ uri: image || defaultPizzaIMG }} style={styles.image} />
       <Text onPress={pickImage} style={styles.textBtn}>
         Select image
       </Text>
