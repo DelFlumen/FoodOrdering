@@ -10,7 +10,6 @@ const CreateProductScreen = () => {
   const [errors, setErrors] = useState<string[]>([]);
   const [isSignUp, setIsSignUp] = useState(false);
   const { id } = useLocalSearchParams();
-  const isUpdating = !!id;
 
   const validateInput = () => {
     let isError;
@@ -35,16 +34,16 @@ const CreateProductScreen = () => {
   };
 
   const onSubmit = () => {
-    isUpdating ? updateProduct() : createProduct();
+    isSignUp ? createAccount() : signIn();
   };
 
-  const createProduct = () => {
+  const createAccount = () => {
     if (!validateInput()) return;
     console.warn("creating product");
     resetFields();
   };
 
-  const updateProduct = () => {
+  const signIn = () => {
     if (!validateInput()) return;
     console.warn("updating product");
     resetFields();
@@ -71,7 +70,7 @@ const CreateProductScreen = () => {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: (isUpdating ? "Update " : "Create ") + "Product",
+          title: isSignUp ? "Sign Up" : "Sign In",
           headerTitleAlign: "center",
         }}
       />
@@ -96,9 +95,12 @@ const CreateProductScreen = () => {
             </Text>
           ))
         : null}
-      <Button onPress={onSubmit} text={isUpdating ? "Update" : "Create"} />
-      <Text onPress={confirmDelete} style={styles.deleteBtn}>
-        {isSignUp ? "Sign In" : "Create An Account"}
+      <Button
+        onPress={onSubmit}
+        text={isSignUp ? "Create Account" : "Sign In"}
+      />
+      <Text onPress={() => setIsSignUp(!isSignUp)} style={styles.textBtn}>
+        {isSignUp ? "Sign In" : "Create Account"}
       </Text>
     </View>
   );
@@ -121,12 +123,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     color: Colors.light.tint,
-    marginVertical: 10,
-  },
-  deleteBtn: {
-    alignSelf: "center",
-    fontWeight: "bold",
-    color: "red",
     marginVertical: 10,
   },
   input: {
