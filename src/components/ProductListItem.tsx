@@ -1,5 +1,5 @@
 import { StyleSheet, Image, Pressable } from "react-native";
-import { Link, useSegments, DynamicRoutes } from "expo-router";
+import { Link, useSegments } from "expo-router";
 
 import Colors from "../constants/Colors";
 import { Product } from "../types";
@@ -15,7 +15,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
 
   return (
     <Link
-      href={`/${segments[0]}/menu/${product.id}` as DynamicRoutes<string>}
+      href={`/${segments[0]}/menu/${product.id}` as `${string}:${string}`}
       asChild
     >
       <Pressable style={styles.container}>
