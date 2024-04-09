@@ -1,7 +1,7 @@
-import { StyleSheet, Image, Pressable, FlatList } from "react-native";
+import { StyleSheet, Image, Pressable, FlatList, View } from "react-native";
 import { Link, Stack, useLocalSearchParams, useSegments } from "expo-router";
 
-import { Text, View } from "@/components/Themed";
+import { Text } from "@/components/Themed";
 import Colors from "@/constants/Colors";
 import OrderListItem from "@/components/OrderListItem";
 import orders from "@assets/data/orders";
@@ -17,19 +17,17 @@ const OrderDetailsScreen = () => {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       <Stack.Screen
         options={{ title: `Order #${order?.id}`, headerTitleAlign: "center" }}
       />
-      <View style={styles.orderListItemWrapper}>
-        <OrderListItem order={order} />
-      </View>
+      <OrderListItem order={order} />
       <FlatList
         data={order.order_items}
-        contentContainerStyle={{ gap: 10, padding: 10 }}
+        contentContainerStyle={{ gap: 10 }}
         renderItem={({ item }) => <OrderItemCard orderItem={item} />}
       />
-    </>
+    </View>
   );
 };
 
@@ -37,27 +35,8 @@ export default OrderDetailsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "white",
     padding: 10,
-    borderRadius: 10,
-    flex: 1,
-  },
-  orderListItemWrapper: {
-    marginTop: 10,
-    marginHorizontal: 10,
-    borderRadius: 10,
-  },
-  image: {
-    width: "100%",
-    aspectRatio: 1,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginVertical: 10,
-  },
-  price: {
-    color: Colors.light.tint,
-    fontWeight: "bold",
+    gap: 20,
+    backgroundColor: "unset",
   },
 });

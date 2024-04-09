@@ -86,7 +86,7 @@ const CreateProductScreen = () => {
         value={password}
         onChangeText={setPassword}
         style={styles.input}
-        secureTextEntry={true}
+        secureTextEntry
       />
       {errors.length
         ? errors.map((err) => (
