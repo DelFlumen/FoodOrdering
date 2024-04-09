@@ -14,22 +14,29 @@ type OrderListItemProps = {
 
 const OrderListItem = ({ order }: OrderListItemProps) => {
   const segments = useSegments();
+  console.log({ order });
 
   return (
-    <Link
-      href={`/${segments[0]}/menu/${order.id}` as `${string}:${string}`}
-      asChild
-    >
-      <Pressable style={styles.container}>
-        <View>
-          <Text style={styles.title}>Order #{order.id}</Text>
-          <Text style={styles.timeText}>
-            {dayjs(order.created_at).fromNow()}
-          </Text>
-        </View>
-        <Text style={styles.statusText}>{order.status}</Text>
-      </Pressable>
-    </Link>
+    <>
+      {order ? (
+        <Link
+          href={`/${segments[0]}/orders/${order?.id}` as `${string}:${string}`}
+          asChild
+        >
+          <Pressable style={styles.container}>
+            <View>
+              <Text style={styles.title}>Order #{order.id}</Text>
+              <Text style={styles.timeText}>
+                {dayjs(order.created_at).fromNow()}
+              </Text>
+            </View>
+            <Text style={styles.statusText}>{order.status}</Text>
+          </Pressable>
+        </Link>
+      ) : (
+        <div>Order not found</div>
+      )}
+    </>
   );
 };
 

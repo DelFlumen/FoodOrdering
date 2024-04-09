@@ -6,11 +6,11 @@ import OrderListItem from "@/components/OrderListItem";
 export default function OrdersScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: "Orders", headerTitleAlign: "center" }} />
+      <Stack.Screen options={{ title: "Orders" }} />
       <FlatList
-        data={orders}
-        renderItem={({ item }) => <OrderListItem order={item} />}
+        data={orders.filter((ord) => !!ord)}
         contentContainerStyle={{ gap: 10, padding: 10 }}
+        renderItem={({ item }) => <OrderListItem order={item} />}
       />
     </>
   );
