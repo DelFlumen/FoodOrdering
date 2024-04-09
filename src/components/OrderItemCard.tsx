@@ -24,7 +24,8 @@ const OrderItemCard = ({ orderItem }: OrderItemProps) => {
       <View>
         <Text style={styles.title}>{orderItem.products.name}</Text>
         <Text style={styles.price}>
-          ${orderItem.products.price} <Text>Size: {orderItem.size}</Text>
+          ${orderItem.products.price}{" "}
+          <Text style={styles.sizeText}>Size: {orderItem.size}</Text>
         </Text>
       </View>
       <Text style={styles.statusText}>{orderItem.quantity}</Text>
@@ -57,10 +58,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginLeft: "auto",
   },
-  timeText: {
+  sizeText: {
     fontSize: 16,
     fontWeight: "400",
-    color: "grey",
   },
   price: {
     fontSize: 18,
