@@ -9,6 +9,7 @@ import OrderItemCard from "@/components/OrderItemCard";
 import StatusSelector from "@/components/StatusSelector";
 
 const OrderDetailsScreen = () => {
+  const segments = useSegments();
   const { id } = useLocalSearchParams();
   const order = orders.find((ord) => ord.id === +id);
 
@@ -27,6 +28,7 @@ const OrderDetailsScreen = () => {
         contentContainerStyle={{ gap: 10 }}
         renderItem={({ item }) => <OrderItemCard orderItem={item} />}
         // ListHeaderComponent={() => <HeaderCard item={ item} /}
+        ListFooterComponent={<StatusSelector order={order} />}
       />
     </View>
   );
