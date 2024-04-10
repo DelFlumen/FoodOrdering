@@ -6,7 +6,7 @@ export default function OrdersScreen() {
   return (
     <>
       <FlatList
-        data={orders.filter((ord) => !!ord)}
+        data={orders}
         contentContainerStyle={{ gap: 10, padding: 10 }}
         renderItem={({ item }) => <OrderListItem order={item} />}
       />
