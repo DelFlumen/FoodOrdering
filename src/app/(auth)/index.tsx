@@ -36,7 +36,7 @@ const authScreen = () => {
   };
 
   const onSubmit = () => {
-    isSignUp ? signUpWithEmail() : signIn();
+    isSignUp ? signUpWithEmail() : signInWithEmail();
   };
 
   const signUpWithEmail = async () => {
@@ -53,9 +53,17 @@ const authScreen = () => {
     resetFields();
   };
 
-  const signIn = () => {
+  const signInWithEmail = async () => {
     if (!validateInput()) return;
-    console.warn("updating product");
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) Alert.alert(error.message);
+    setIsLoading(false);
+
     resetFields();
   };
 
