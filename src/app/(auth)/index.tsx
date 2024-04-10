@@ -3,19 +3,21 @@ import React, { useState } from "react";
 import { Stack, useLocalSearchParams } from "expo-router";
 import Button from "@/components/Button";
 import Colors from "@/constants/Colors";
+import { supabase } from "@/lib/supabase";
 
-const CreateProductScreen = () => {
-  const [name, setName] = useState("");
+const authScreen = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useLocalSearchParams();
 
   const validateInput = () => {
     let isError;
     let newErrors: string[] = [];
-    if (!name) {
-      newErrors.push("Name is required");
+    if (!email) {
+      newErrors.push("Email is required");
       isError = true;
     }
     if (!password) {
@@ -29,17 +31,25 @@ const CreateProductScreen = () => {
   };
 
   const resetFields = () => {
-    setName("");
+    setEmail("");
     setPassword("");
   };
 
   const onSubmit = () => {
-    isSignUp ? createAccount() : signIn();
+    isSignUp ? signUpWithEmail() : signIn();
   };
 
-  const createAccount = () => {
+  const signUpWithEmail = async () => {
     if (!validateInput()) return;
-    console.warn("creating product");
+    setIsLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) Alert.alert(error.message);
+    setIsLoading(false);
+
     resetFields();
   };
 
@@ -47,23 +57,6 @@ const CreateProductScreen = () => {
     if (!validateInput()) return;
     console.warn("updating product");
     resetFields();
-  };
-
-  const onDelete = () => {
-    console.warn("Delete");
-  };
-
-  const confirmDelete = () => {
-    Alert.alert("Confirm", "Are you sure you want to delete this product?", [
-      {
-        text: "Cancel",
-      },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: onDelete,
-      },
-    ]);
   };
 
   return (
@@ -74,11 +67,11 @@ const CreateProductScreen = () => {
           headerTitleAlign: "center",
         }}
       />
-      <Text style={styles.label}>Name</Text>
+      <Text style={styles.label}>email</Text>
       <TextInput
-        value={name}
-        onChangeText={setName}
-        placeholder="Name"
+        value={email}
+        onChangeText={setEmail}
+        placeholder="email"
         style={styles.input}
       />
       <Text style={styles.label}>Password</Text>
@@ -97,7 +90,9 @@ const CreateProductScreen = () => {
         : null}
       <Button
         onPress={onSubmit}
+        disabled={isLoading}
         text={isSignUp ? "Create Account" : "Sign In"}
+        style={{ backgroundColor: isLoading ? "grey" : Colors.light.tint }}
       />
       <Text onPress={() => setIsSignUp(!isSignUp)} style={styles.textBtn}>
         {isSignUp ? "Sign In" : "Create Account"}
@@ -106,7 +101,7 @@ const CreateProductScreen = () => {
   );
 };
 
-export default CreateProductScreen;
+export default authScreen;
 
 const styles = StyleSheet.create({
   container: {
