@@ -12,12 +12,16 @@ import { Session } from "@supabase/supabase-js";
 
 type AuthContextType = {
   session: Session | null;
+  profile: any;
   isLoading: boolean;
+  isAdmin: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | null>({
   session: null,
+  profile: null,
   isLoading: true,
+  isAdmin: false,
 });
 
 export const useAuthContext = () => {
@@ -29,23 +33,47 @@ export const useAuthContext = () => {
 };
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
-  const [session, setSession] = useState<Session | null>(null);
+  const [userSession, setUserSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      setSession(data.session);
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
+      setUserSession(session);
+      setIsLoading(false);
+
+      if (session) {
+        // fetch profile
+        const { data } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+        setProfile(data || null);
+      }
       setIsLoading(false);
     };
     fetchSession();
     supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      setUserSession(session);
     });
   }, []);
 
+  console.log({ profile });
+
   return (
-    <AuthContext.Provider value={{ session, isLoading }}>
+    <AuthContext.Provider
+      value={{
+        session: userSession,
+        profile,
+        isLoading,
+        isAdmin: profile?.group === "ADMIN",
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
