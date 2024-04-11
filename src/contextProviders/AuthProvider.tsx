@@ -1,4 +1,3 @@
-import { CartItem, Product } from "@/types";
 import {
   PropsWithChildren,
   createContext,
@@ -6,7 +5,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { randomUUID } from "expo-crypto";
 import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 
@@ -44,7 +42,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         error,
       } = await supabase.auth.getSession();
       setUserSession(session);
-      setIsLoading(false);
 
       if (session) {
         // fetch profile
@@ -58,9 +55,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
       setIsLoading(false);
     };
     fetchSession();
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setUserSession(session);
-    });
   }, []);
 
   console.log({ profile });
