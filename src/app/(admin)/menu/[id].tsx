@@ -5,7 +5,7 @@ import Button from "@/components/Button";
 
 import products from "@assets/data/products";
 import Colors from "@/constants/Colors";
-import { useCartContext } from "@/contextProviders/CartProvider";
+import { useCartContext } from "@/providers/CartProvider";
 import { PizzaSize } from "@/types";
 import { defaultPizzaIMG } from "@/constants/Images";
 import { useRouter } from "expo-router";

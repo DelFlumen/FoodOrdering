@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import CartListItem from "@/components/CartListItem";
 import { Text } from "@/components/Themed";
-import { useCartContext } from "@/contextProviders/CartProvider";
+import { useCartContext } from "@/providers/CartProvider";
 import { FlatList, StyleSheet, View } from "react-native";
 
 const CartScreen = () => {

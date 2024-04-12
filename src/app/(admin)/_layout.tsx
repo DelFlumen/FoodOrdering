@@ -4,7 +4,7 @@ import { Redirect, Tabs } from "expo-router";
 
 import Colors from "@/constants/Colors";
 import { useClientOnlyValue } from "@components/useClientOnlyValue";
-import { useAuthContext } from "@/contextProviders/AuthProvider";
+import { useAuthContext } from "@/providers/AuthProvider";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {

@@ -1,10 +1,15 @@
-import { FlatList } from "react-native";
-import products from "@assets/data/products";
+import { ActivityIndicator, FlatList } from "react-native";
 import ProductListItem from "@components/ProductListItem";
-import { View } from "@/components/Themed";
+import { Text, View } from "@/components/Themed";
 import { Stack } from "expo-router";
+import { useProductList } from "@/api/products";
 
 export default function MenuScreen() {
+  const { data: products, error, isLoading } = useProductList();
+
+  if (isLoading) return <ActivityIndicator />;
+  if (error) return <Text>Failed to fetch products</Text>;
+
   return (
     <View>
       <Stack.Screen options={{ title: "Menu", headerTitleAlign: "center" }} />

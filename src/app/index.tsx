@@ -2,7 +2,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import React from "react";
 import Button from "../components/Button";
 import { Link, Redirect } from "expo-router";
-import { useAuthContext } from "@/contextProviders/AuthProvider";
+import { useAuthContext } from "@/providers/AuthProvider";
 import { supabase } from "@/lib/supabase";
 
 const index = () => {
