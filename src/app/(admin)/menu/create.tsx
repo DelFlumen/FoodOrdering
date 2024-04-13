@@ -1,22 +1,49 @@
-import { Alert, Image, StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import Button from "@/components/Button";
 import { defaultPizzaIMG } from "@/constants/Images";
 import Colors from "@/constants/Colors";
-import { useInsertProduct } from "@/api/products";
+import { useInsertProduct, useProduct, useUpdateProduct } from "@/api/products";
 
-const CreateProductScreen = () => {
+const handleCreateProductScreen = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [image, setImage] = useState<string | null>(null);
-  const { id } = useLocalSearchParams();
+  const { id: idString } = useLocalSearchParams();
+  const id = +(typeof idString === "string" ? idString : idString?.[0]);
   const router = useRouter();
   const isUpdating = !!id;
 
   const { mutate: insertProduct } = useInsertProduct();
+  const { mutate: updateProduct } = useUpdateProduct();
+  const { data: productToUpdate, error, isLoading } = useProduct(id);
+
+  useEffect(() => {
+    if (productToUpdate) {
+      setName(productToUpdate.name);
+      setPrice(productToUpdate.price.toString());
+      setImage(productToUpdate.image);
+    }
+  }, [productToUpdate]);
+
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (error) {
+    return <Text>Failed to fetch a product</Text>;
+  }
 
   const validateInput = () => {
     let isError;
@@ -44,10 +71,10 @@ const CreateProductScreen = () => {
   };
 
   const onSubmit = () => {
-    isUpdating ? updateProduct() : createProduct();
+    isUpdating ? handleUpdateProduct() : handleCreateProduct();
   };
 
-  const createProduct = () => {
+  const handleCreateProduct = () => {
     if (!validateInput()) return;
     insertProduct(
       { name, price: parseFloat(price), image },
@@ -60,10 +87,16 @@ const CreateProductScreen = () => {
     );
   };
 
-  const updateProduct = () => {
+  const handleUpdateProduct = () => {
     if (!validateInput()) return;
-    console.warn("updating product");
-    resetFields();
+    updateProduct(
+      { id, name, image, price: parseFloat(price) },
+      {
+        onSuccess: () => {
+          router.back();
+        },
+      }
+    );
   };
 
   const onDelete = () => {
@@ -142,7 +175,7 @@ const CreateProductScreen = () => {
   );
 };
 
-export default CreateProductScreen;
+export default handleCreateProductScreen;
 
 const styles = StyleSheet.create({
   container: {
