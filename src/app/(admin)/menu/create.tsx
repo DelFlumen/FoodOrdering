@@ -13,7 +13,12 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import Button from "@/components/Button";
 import { defaultPizzaIMG } from "@/constants/Images";
 import Colors from "@/constants/Colors";
-import { useInsertProduct, useProduct, useUpdateProduct } from "@/api/products";
+import {
+  useDeleteProduct,
+  useInsertProduct,
+  useProduct,
+  useUpdateProduct,
+} from "@/api/products";
 
 const handleCreateProductScreen = () => {
   const [name, setName] = useState("");
@@ -27,6 +32,8 @@ const handleCreateProductScreen = () => {
 
   const { mutate: insertProduct } = useInsertProduct();
   const { mutate: updateProduct } = useUpdateProduct();
+  const { mutate: deleteProduct } = useDeleteProduct();
+  const [isMutating, setIsMutating] = useState(false);
   const { data: productToUpdate, error, isLoading } = useProduct(id);
 
   useEffect(() => {
@@ -37,7 +44,7 @@ const handleCreateProductScreen = () => {
     }
   }, [productToUpdate]);
 
-  if (isLoading) {
+  if (isLoading || isMutating) {
     return <ActivityIndicator />;
   }
 
@@ -99,8 +106,13 @@ const handleCreateProductScreen = () => {
     );
   };
 
-  const onDelete = () => {
-    console.warn("Delete");
+  const handleDelete = () => {
+    setIsMutating(true);
+    deleteProduct(id, {
+      onSuccess: () => {
+        router.replace("/(admin)");
+      },
+    });
   };
 
   const confirmDelete = () => {
@@ -111,7 +123,7 @@ const handleCreateProductScreen = () => {
       {
         text: "Delete",
         style: "destructive",
-        onPress: onDelete,
+        onPress: handleDelete,
       },
     ]);
   };
