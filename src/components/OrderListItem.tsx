@@ -5,16 +5,16 @@ import dayjs from "dayjs";
 
 import { Order } from "../types";
 import { Text, View } from "./Themed";
+import { Tables } from "@/database.types";
 
 dayjs.extend(relativeTime);
 
 type OrderListItemProps = {
-  order: Order;
+  order: Tables<"orders">;
 };
 
 const OrderListItem = ({ order }: OrderListItemProps) => {
   const segments = useSegments();
-  console.log({ order });
 
   return (
     <>
