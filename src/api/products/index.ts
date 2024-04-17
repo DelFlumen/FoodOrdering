@@ -44,6 +44,7 @@ export const useInsertProduct = () => {
           image: data.image,
           price: data.price,
         })
+        .select()
         .single();
       if (error) throw new Error(error.message);
       return newProduct;

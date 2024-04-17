@@ -1,12 +1,12 @@
 import Button from "@/components/Button";
 import CartListItem from "@/components/CartListItem";
 import { Text } from "@/components/Themed";
+import { useAuthContext } from "@/providers/AuthProvider";
 import { useCartContext } from "@/providers/CartProvider";
 import { FlatList, StyleSheet, View } from "react-native";
 
 const CartScreen = () => {
-  const { items, total } = useCartContext();
-  console.log({ items });
+  const { items, total, checkout } = useCartContext();
 
   return (
     <View style={{ padding: 10 }}>
@@ -20,7 +20,7 @@ const CartScreen = () => {
             contentContainerStyle={{ gap: 10 }}
           />
           <Text style={styles.total}>Total: ${total}</Text>
-          <Button text="Checkout" />
+          <Button text="Checkout" onPress={checkout} />
         </View>
       ) : (
         <Text>No items</Text>

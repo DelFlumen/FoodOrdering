@@ -57,8 +57,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
     fetchSession();
   }, []);
 
-  console.log({ profile });
-
   return (
     <AuthContext.Provider
       value={{
