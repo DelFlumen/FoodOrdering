@@ -1,4 +1,11 @@
-import { StyleSheet, Image, Pressable, FlatList, View } from "react-native";
+import {
+  StyleSheet,
+  Image,
+  Pressable,
+  FlatList,
+  View,
+  ActivityIndicator,
+} from "react-native";
 import { Link, Stack, useLocalSearchParams, useSegments } from "expo-router";
 
 import { Text } from "@/components/Themed";
@@ -7,14 +14,18 @@ import OrderListItem from "@/components/OrderListItem";
 import orders from "@assets/data/orders";
 import OrderItemCard from "@/components/OrderItemCard";
 import StatusSelector from "@/components/StatusSelector";
+import { useOrderDetails } from "@/api/orders";
 
 const OrderDetailsScreen = () => {
-  const segments = useSegments();
-  const { id } = useLocalSearchParams();
-  const order = orders.find((ord) => ord.id === +id);
+  const { id: idString } = useLocalSearchParams();
+  const id = +(typeof idString === "string" ? idString : idString[0]);
 
-  if (!order) {
-    return <Text>Product not found</Text>;
+  const { data: order, error, isLoading } = useOrderDetails(id);
+
+  if (isLoading) return <ActivityIndicator />;
+
+  if (error) {
+    return <Text>Failed to fetch an order</Text>;
   }
 
   return (
@@ -24,7 +35,7 @@ const OrderDetailsScreen = () => {
       />
       <OrderListItem order={order} />
       <FlatList
-        data={order.order_items}
+        data={order?.order_items}
         contentContainerStyle={{ gap: 10 }}
         renderItem={({ item }) => <OrderItemCard orderItem={item} />}
         // ListHeaderComponent={() => <HeaderCard item={ item} /}

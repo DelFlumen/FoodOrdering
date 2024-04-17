@@ -49,7 +49,7 @@ const ProductDetailsScreen = () => {
         options={{ title: product?.name, headerTitleAlign: "center" }}
       />
       <Image
-        source={{ uri: product.image || defaultPizzaIMG }}
+        source={{ uri: product?.image || defaultPizzaIMG }}
         style={styles.image}
         resizeMode="contain"
       />
