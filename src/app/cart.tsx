@@ -1,12 +1,13 @@
 import Button from "@/components/Button";
 import CartListItem from "@/components/CartListItem";
 import { Text } from "@/components/Themed";
-import { useAuthContext } from "@/providers/AuthProvider";
 import { useCartContext } from "@/providers/CartProvider";
-import { FlatList, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 
 const CartScreen = () => {
-  const { items, total, checkout } = useCartContext();
+  const { items, total, checkout, isLoading } = useCartContext();
+
+  if (isLoading) return <ActivityIndicator />;
 
   return (
     <View style={{ padding: 10 }}>
