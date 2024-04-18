@@ -10,19 +10,23 @@ import { Tables } from "@/database.types";
 dayjs.extend(relativeTime);
 
 type OrderItemProps = {
-  orderItem: Tables<"order_items"> & { products: Tables<"products"> };
+  orderItem: Tables<"order_items"> & { products: Tables<"products"> | null };
 };
 
 const OrderItemCard = ({ orderItem }: OrderItemProps) => {
+  if (!orderItem.products) {
+    console.error("Failed to fetch a product");
+    return <Text>Failed to fetch a product</Text>;
+  }
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: orderItem.products.image || defaultPizzaIMG }}
+        source={{ uri: orderItem?.products?.image || defaultPizzaIMG }}
         style={styles.image}
         resizeMode="contain"
       />
       <View>
-        <Text style={styles.title}>{orderItem.products.name}</Text>
+        <Text style={styles.title}>{orderItem?.products?.name}</Text>
         <Text style={styles.price}>
           ${orderItem.products.price}{" "}
           <Text style={styles.sizeText}>Size: {orderItem.size}</Text>

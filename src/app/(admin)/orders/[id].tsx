@@ -36,13 +36,17 @@ const OrderDetailsScreen = () => {
         options={{ title: `Order #${order?.id}`, headerTitleAlign: "center" }}
       />
       <OrderListItem order={order} />
-      <FlatList
-        data={order?.order_items}
-        contentContainerStyle={{ gap: 10 }}
-        renderItem={({ item }) => <OrderItemCard orderItem={item} />}
-        // ListHeaderComponent={() => <HeaderCard item={ item} /}
-        ListFooterComponent={<StatusSelector order={order} />}
-      />
+      {order && order.order_items.length && (
+        <FlatList
+          data={order.order_items}
+          contentContainerStyle={{ gap: 10 }}
+          renderItem={({ item }) =>
+            item.products && <OrderItemCard orderItem={item} />
+          }
+          // ListHeaderComponent={() => <HeaderCard item={ item} /}
+          ListFooterComponent={<StatusSelector order={order} />}
+        />
+      )}
     </View>
   );
 };

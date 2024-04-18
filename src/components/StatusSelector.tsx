@@ -2,8 +2,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Order, OrderStatusList } from "@/types";
 import Colors from "@/constants/Colors";
+import { Tables } from "@/database.types";
 
-const StatusSelector = ({ order }: { order: Order }) => {
+const StatusSelector = ({ order }: { order: Tables<"orders"> }) => {
   return (
     <>
       <Text style={{ fontWeight: "bold" }}>Status</Text>
