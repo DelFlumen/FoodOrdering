@@ -24,9 +24,11 @@ const OrderDetailsScreen = () => {
 
   if (isLoading) return <ActivityIndicator />;
 
-  if (error) {
+  if (error || !order) {
     return <Text>Failed to fetch an order</Text>;
   }
+
+  console.log(order?.order_items[0]);
 
   return (
     <View style={styles.container}>

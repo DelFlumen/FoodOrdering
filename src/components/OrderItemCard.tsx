@@ -1,16 +1,16 @@
-import { StyleSheet, Pressable, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dayjs from "dayjs";
 
-import { OrderItem } from "../types";
 import { Text, View } from "./Themed";
 import { defaultPizzaIMG } from "@/constants/Images";
 import Colors from "@/constants/Colors";
+import { Tables } from "@/database.types";
 
 dayjs.extend(relativeTime);
 
 type OrderItemProps = {
-  orderItem: OrderItem;
+  orderItem: Tables<"order_items"> & { products: Tables<"products"> };
 };
 
 const OrderItemCard = ({ orderItem }: OrderItemProps) => {
