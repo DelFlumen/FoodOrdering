@@ -4,7 +4,13 @@ import { Order, OrderStatusList } from "@/types";
 import Colors from "@/constants/Colors";
 import { Tables } from "@/database.types";
 
-const StatusSelector = ({ order }: { order: Tables<"orders"> }) => {
+const StatusSelector = ({
+  order,
+  updateStatus,
+}: {
+  order: Tables<"orders">;
+  updateStatus: (status: string) => void | null;
+}) => {
   return (
     <>
       <Text style={{ fontWeight: "bold" }}>Status</Text>
@@ -12,7 +18,7 @@ const StatusSelector = ({ order }: { order: Tables<"orders"> }) => {
         {OrderStatusList.map((status) => (
           <Pressable
             key={status}
-            onPress={() => console.warn("Update status")}
+            onPress={() => updateStatus(status)}
             style={{
               borderColor: Colors.light.tint,
               borderWidth: 1,

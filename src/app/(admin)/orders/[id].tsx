@@ -14,21 +14,37 @@ import OrderListItem from "@/components/OrderListItem";
 import orders from "@assets/data/orders";
 import OrderItemCard from "@/components/OrderItemCard";
 import StatusSelector from "@/components/StatusSelector";
-import { useOrderDetails } from "@/api/orders";
+import { useOrderDetails, useUpdateOrder } from "@/api/orders";
+import { useState } from "react";
 
 const OrderDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = +(typeof idString === "string" ? idString : idString[0]);
 
   const { data: order, error, isLoading } = useOrderDetails(id);
+  const { mutate: updateOrder } = useUpdateOrder();
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isLoading || !id) return <ActivityIndicator />;
+
+  const updateStatus = (status: string) => {
+    if (id) {
+      updateOrder(
+        { id: id, updatedFields: { status } },
+        {
+          onSuccess: () => console.log("successful order status update"),
+          onError: (error) =>
+            console.log("updating order status error", {
+              error: error.message,
+              id,
+            }),
+        }
+      );
+    }
+  };
 
   if (error || !order) {
     return <Text>Failed to fetch an order</Text>;
   }
-
-  console.log(order?.order_items[0]);
 
   return (
     <View style={styles.container}>
@@ -44,7 +60,9 @@ const OrderDetailsScreen = () => {
             item.products && <OrderItemCard orderItem={item} />
           }
           // ListHeaderComponent={() => <HeaderCard item={ item} /}
-          ListFooterComponent={<StatusSelector order={order} />}
+          ListFooterComponent={
+            <StatusSelector order={order} updateStatus={updateStatus} />
+          }
         />
       )}
     </View>
