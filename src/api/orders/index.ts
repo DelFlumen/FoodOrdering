@@ -105,7 +105,7 @@ export const useUpdateOrder = () => {
       if (error) throw new Error(error.message);
       return updatedOrder;
     },
-    async onSuccess(_, data) {
+    async onSuccess(_, { id }) {
       // @ts-ignore comment
       await queryClient.invalidateQueries(["orders"]);
       // @ts-ignore comment

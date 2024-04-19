@@ -15,7 +15,7 @@ import orders from "@assets/data/orders";
 import OrderItemCard from "@/components/OrderItemCard";
 import StatusSelector from "@/components/StatusSelector";
 import { useOrderDetails, useUpdateOrder } from "@/api/orders";
-import { useState } from "react";
+import { OrderStatusList } from "@/types";
 
 const OrderDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
