@@ -12,12 +12,14 @@ import { Text } from "@/components/Themed";
 import OrderListItem from "@/components/OrderListItem";
 import OrderItemCard from "@/components/OrderItemCard";
 import { useOrderDetails } from "@/api/orders";
+import { useUpdateOrderSubscription } from "@/api/orders/subscriptions";
 
 const OrderDetailsScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = +(typeof idString === "string" ? idString : idString[0]);
 
   const { data: order, error, isLoading } = useOrderDetails(id);
+  useUpdateOrderSubscription(id);
 
   if (isLoading) return <ActivityIndicator />;
 

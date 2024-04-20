@@ -76,7 +76,7 @@ export const useInsertOrder = () => {
       return newOrder;
     },
     async onSuccess() {
-      // @ts-ignore comment
+      // @ts-ignore
       await queryClient.invalidateQueries(["orders"] as QueryKey, undefined);
     },
     onError(error) {
@@ -106,9 +106,9 @@ export const useUpdateOrder = () => {
       return updatedOrder;
     },
     async onSuccess(_, { id }) {
-      // @ts-ignore comment
+      // @ts-ignore
       await queryClient.invalidateQueries(["orders"]);
-      // @ts-ignore comment
+      // @ts-ignore
       await queryClient.invalidateQueries(["orders", id]);
     },
     onError(error) {
