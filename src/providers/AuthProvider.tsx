@@ -32,7 +32,7 @@ export const useAuthContext = () => {
 
 const AuthProvider = ({ children }: PropsWithChildren) => {
   const [userSession, setUserSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<Record<string, any>>({});
+  const [profile, setProfile] = useState<Record<string, any> | null>({});
   const [isLoading, setIsLoading] = useState(true);
 
   supabase.auth.onAuthStateChange((_event, session) => {
