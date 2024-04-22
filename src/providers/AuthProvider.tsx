@@ -35,6 +35,10 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
   const [profile, setProfile] = useState<Record<string, any>>({});
   const [isLoading, setIsLoading] = useState(true);
 
+  supabase.auth.onAuthStateChange((_event, session) => {
+    setUserSession(session);
+  });
+
   useEffect(() => {
     const fetchSession = async () => {
       const {

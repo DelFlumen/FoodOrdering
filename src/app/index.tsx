@@ -11,6 +11,7 @@ const index = () => {
   if (isLoading) {
     return <ActivityIndicator />;
   }
+  console.log({ session });
 
   if (!session) {
     return <Redirect href={"/(auth)"} />;

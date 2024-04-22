@@ -37,9 +37,9 @@ const ProductDetailsScreen = () => {
   }
 
   const addToCart = () => {
-    if (!product) console.error("no product");
-
-    addItem(product, selectedSize);
+    if (!product) {
+      console.error("no product");
+    } else addItem(product, selectedSize);
     router.push("/cart");
   };
 
