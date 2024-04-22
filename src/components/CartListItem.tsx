@@ -5,6 +5,7 @@ import { CartItem } from "../types";
 import { defaultPizzaIMG } from "@/constants/Images";
 import { FontAwesome } from "@expo/vector-icons";
 import { useCartContext } from "@/providers/CartProvider";
+import RemoteImage from "./RemoteImage";
 
 type CartListItemProps = {
   cartItem: CartItem;
@@ -15,8 +16,9 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
 
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: cartItem.product.image || defaultPizzaIMG }}
+      <RemoteImage
+        path={cartItem.product?.image}
+        fallback={defaultPizzaIMG}
         style={styles.image}
         resizeMode="contain"
       />

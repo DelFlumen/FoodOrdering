@@ -6,6 +6,7 @@ import { Text, View } from "./Themed";
 import { defaultPizzaIMG } from "@/constants/Images";
 import Colors from "@/constants/Colors";
 import { Tables } from "@/database.types";
+import RemoteImage from "./RemoteImage";
 
 dayjs.extend(relativeTime);
 
@@ -20,8 +21,9 @@ const OrderItemCard = ({ orderItem }: OrderItemProps) => {
   }
   return (
     <View style={styles.container}>
-      <Image
-        source={{ uri: orderItem?.products?.image || defaultPizzaIMG }}
+      <RemoteImage
+        path={orderItem?.products?.image}
+        fallback={defaultPizzaIMG}
         style={styles.image}
         resizeMode="contain"
       />
