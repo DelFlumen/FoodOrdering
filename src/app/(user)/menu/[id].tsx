@@ -17,6 +17,7 @@ import { PizzaSize } from "@/types";
 import { defaultPizzaIMG } from "@/constants/Images";
 import { useRouter } from "expo-router";
 import { useProduct } from "@/api/products";
+import RemoteImage from "@/components/RemoteImage";
 
 const sizes: PizzaSize[] = ["S", "M", "L", "XL"];
 
@@ -47,8 +48,9 @@ const ProductDetailsScreen = () => {
       <Stack.Screen
         options={{ title: product?.name, headerTitleAlign: "center" }}
       />
-      <Image
-        source={{ uri: product?.image || defaultPizzaIMG }}
+      <RemoteImage
+        path={product?.image}
+        fallback={defaultPizzaIMG}
         style={styles.image}
         resizeMode="contain"
       />
@@ -77,7 +79,7 @@ const ProductDetailsScreen = () => {
         ))}
       </View>
 
-      <Text style={styles.price}>${product.price}</Text>
+      <Text style={styles.price}>${product?.price}</Text>
       <Button onPress={addToCart} text="Add to cart" />
     </View>
   );

@@ -19,6 +19,10 @@ import {
   useProduct,
   useUpdateProduct,
 } from "@/api/products";
+import * as FileSystem from "expo-file-system";
+import { supabase } from "@/lib/supabase";
+import { randomUUID } from "expo-crypto";
+import { decode } from "base64-arraybuffer";
 
 const handleCreateProductScreen = () => {
   const [name, setName] = useState("");
@@ -28,13 +32,19 @@ const handleCreateProductScreen = () => {
   const { id: idString } = useLocalSearchParams();
   const id = +(typeof idString === "string" ? idString : idString?.[0]);
   const router = useRouter();
-  const isUpdating = !!id;
+  const isUpdating = Number.isFinite(id);
 
   const { mutate: insertProduct } = useInsertProduct();
   const { mutate: updateProduct } = useUpdateProduct();
   const { mutate: deleteProduct } = useDeleteProduct();
   const [isMutating, setIsMutating] = useState(false);
-  const { data: productToUpdate, error, isLoading } = useProduct(id);
+  const {
+    data: productToUpdate,
+    error,
+    isLoading,
+  } = isUpdating
+    ? useProduct(id)
+    : { data: undefined, error: undefined, isLoading: false };
 
   useEffect(() => {
     if (productToUpdate) {
@@ -48,7 +58,7 @@ const handleCreateProductScreen = () => {
     return <ActivityIndicator />;
   }
 
-  if (error) {
+  if (isUpdating && error) {
     return <Text>Failed to fetch a product</Text>;
   }
 
@@ -81,10 +91,14 @@ const handleCreateProductScreen = () => {
     isUpdating ? handleUpdateProduct() : handleCreateProduct();
   };
 
-  const handleCreateProduct = () => {
+  const handleCreateProduct = async () => {
     if (!validateInput()) return;
+    setIsMutating(true);
+
+    const imagePath = await uploadImage();
+
     insertProduct(
-      { name, price: parseFloat(price), image },
+      { name, price: parseFloat(price), image: imagePath },
       {
         onSuccess: () => {
           resetFields();
@@ -94,10 +108,14 @@ const handleCreateProductScreen = () => {
     );
   };
 
-  const handleUpdateProduct = () => {
+  const handleUpdateProduct = async () => {
     if (!validateInput()) return;
+    setIsMutating(true);
+
+    const imagePath = await uploadImage();
+
     updateProduct(
-      { id, name, image, price: parseFloat(price) },
+      { id, name, image: imagePath, price: parseFloat(price) },
       {
         onSuccess: () => {
           router.back();
@@ -139,6 +157,26 @@ const handleCreateProductScreen = () => {
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!image?.startsWith("file://")) {
+      return;
+    }
+
+    const base64 = await FileSystem.readAsStringAsync(image, {
+      encoding: "base64",
+    });
+    const filePath = `${randomUUID()}.png`;
+    const contentType = "image/png";
+    const { data, error } = await supabase.storage
+      .from("product-images")
+      .upload(filePath, decode(base64), { contentType });
+    console.log("uploading image error", error);
+
+    if (data) {
+      return data.path;
     }
   };
 

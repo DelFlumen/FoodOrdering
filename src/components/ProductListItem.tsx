@@ -3,6 +3,7 @@ import { Link, useSegments } from "expo-router";
 
 import Colors from "../constants/Colors";
 import { Text } from "./Themed";
+import RemoteImage from "./RemoteImage";
 import { defaultPizzaIMG } from "@/constants/Images";
 import { Tables } from "@/database.types";
 
@@ -13,14 +14,15 @@ type ProductListItemProps = {
 const ProductListItem = ({ product }: ProductListItemProps) => {
   const segments = useSegments();
 
-  return (
+  return product ? (
     <Link
       href={`/${segments[0]}/menu/${product.id}` as `${string}:${string}`}
       asChild
     >
       <Pressable style={styles.container}>
-        <Image
-          source={{ uri: product.image || defaultPizzaIMG }}
+        <RemoteImage
+          path={product?.image}
+          fallback={defaultPizzaIMG}
           style={styles.image}
           resizeMode="contain"
         />
@@ -30,7 +32,7 @@ const ProductListItem = ({ product }: ProductListItemProps) => {
         <Text style={styles.price}>${product.price}</Text>
       </Pressable>
     </Link>
-  );
+  ) : null;
 };
 
 export default ProductListItem;
