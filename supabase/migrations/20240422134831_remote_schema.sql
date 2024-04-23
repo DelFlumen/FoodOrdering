@@ -1,6 +1,3 @@
-CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user();
-
-
 create policy "Allow authenticated to select, insert, update 16wiy3a_0"
 on "storage"."objects"
 as permissive
